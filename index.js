@@ -1,11 +1,11 @@
 let camera, scene, renderer;
 let mesh;
 let materials = new Array();
+let buttonList = new Array();
 let controls;
 let step;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-var buttonList = new Array();
 var buttonData = [
   {
     Name: "Button_0",
@@ -13,128 +13,128 @@ var buttonData = [
     PosY: -400,
     PosZ: 50,
     RoationX: 90,
-    RoationY: 70,
-    RoationZ: 0,
+    RoationY: 0,
+    RoationZ: -70,
     Step: 0,
     ToGo: 1,
   },
   {
     Name: "Button_1",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 0,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 1,
     ToGo: 0,
   },
   {
     Name: "Button_2",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 0,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 1,
     ToGo: 2,
   },
   {
     Name: "Button_3",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 1,
     ToGo: 3,
   },
   {
     Name: "Button_4",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 2,
     ToGo: 1,
   },
   {
     Name: "Button_5",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 2,
     ToGo: 4,
   },
   {
     Name: "Button_6",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 3,
     ToGo: 1,
   },
   {
     Name: "Button_7",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 3,
     ToGo: 4,
   },
   {
     Name: "Button_8",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 4,
     ToGo: 3,
   },
   {
     Name: "Button_9",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 4,
     ToGo: 2,
   },
   {
     Name: "Button_10",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 4,
     ToGo: 5,
   },
   {
     Name: "Button_11",
-    PosX: 200,
+    PosX: 0,
     PosY: -400,
-    PosZ: 50,
-    RoationX: 90,
-    RoationY: 70,
+    PosZ: 00,
+    RoationX: 0,
+    RoationY: 0,
     RoationZ: 0,
     Step: 5,
     ToGo: 4,
@@ -169,6 +169,7 @@ function init() {
 
     materials.push(material);
   }
+  console.log(materials);
 
   const geometry = new THREE.SphereGeometry(500, 64, 64);
   mesh = new THREE.Mesh(geometry, materials[0]);
@@ -201,25 +202,23 @@ function CreateButton() {
   const arrowButtonMaterial = new THREE.MeshBasicMaterial({
     map: arrowButtonTexture,
     transparent: true,
-    side: THREE.BackSide,
+    side: THREE.DoubleSide,
   });
-  arrowButton = new THREE.Mesh(arrowButtonGeometry, arrowButtonMaterial);
 
   for (var i = 0; i < buttonData.length; i++) {
-    buttonList[i] = arrowButton;
-    buttonList[i].name = buttonData[i].Name;
-    buttonList[i].position.set(
+    const button = new THREE.Mesh(arrowButtonGeometry, arrowButtonMaterial);
+    button.name = buttonData[i].Name;
+    button.position.set(
       buttonData[i].PosX,
       buttonData[i].PosY,
       buttonData[i].PosZ
     );
-    buttonList[i].rotateX(Math.PI / 2);
-    // buttonList[i].rotateX(Math.PI / (180 / buttonData[i].RoationX));
-    buttonList[i].rotateY(Math.PI / (180 / buttonData[i].RoationY));
-    // buttonList[i].rotateZ(Math.PI / (180 / buttonData[i].RoationZ));
-    console.log(buttonList[i].name);
+    button.rotateX(Math.PI / (180 / buttonData[i].RoationX));
+    button.rotateY(Math.PI / (180 / buttonData[i].RoationY));
+    button.rotateZ(Math.PI / (180 / buttonData[i].RoationZ));
 
-    scene.add(buttonList[i]);
+    scene.add(button);
+    buttonList.push(button);
   }
   for (var i = 0; i < buttonData.length; i++) {
     console.log(buttonList[i].name);
@@ -237,13 +236,8 @@ function ChangeButton(step) {
       buttonList[i].visible = true;
       buttonList[i].layers.enable(1);
     } else {
-      // buttonList[i].visible = false;
-      // buttonList[i].layers.enable(2);
-    }
-  }
-  for (var i = 0; i < buttonList.length; i++) {
-    if (buttonList[i].visible === true) {
-      console.log(buttonList[i].name);
+      buttonList[i].visible = false;
+      buttonList[i].layers.enable(2);
     }
   }
 }

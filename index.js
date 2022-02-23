@@ -4,13 +4,14 @@ let materials = new Array();
 let buttonList = new Array();
 let controls;
 let step;
+let getIndex;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 var buttonData = [
   {
     Name: "Button_0",
     PosX: 200,
-    PosY: -400,
+    PosY: -350,
     PosZ: 50,
     RoationX: 90,
     RoationY: 0,
@@ -169,7 +170,6 @@ function init() {
 
     materials.push(material);
   }
-  console.log(materials);
 
   const geometry = new THREE.SphereGeometry(500, 64, 64);
   mesh = new THREE.Mesh(geometry, materials[0]);
@@ -220,10 +220,6 @@ function CreateButton() {
     scene.add(button);
     buttonList.push(button);
   }
-  for (var i = 0; i < buttonData.length; i++) {
-    console.log(buttonList[i].name);
-  }
-  console.log(buttonList);
 }
 
 function ChangeMaterial(step) {
@@ -250,32 +246,49 @@ function OverButton(event) {
   raycaster.layers.set(1);
 
   const intersects = raycaster.intersectObjects(buttonList);
-  for (var i = 0; i < intersects.length; i++) {
-    for (var j = 0; j < buttonList.length; j++) {
-      if (intersects[i].object.name === buttonList[j].name) {
-        console.log(buttonList[j].name);
-        // do
+
+  if (intersects.length > 0) {
+    for (var i = 0; i < intersects.length; i++) {
+      for (var j = 0; j < buttonList.length; j++) {
+        if (intersects[i].object.name === buttonList[j].name) {
+          console.log(buttonList[j].name);
+          buttonList[j].scale.set(1.2, 1.2, 1.2);
+          getIndex = j;
+        } else {
+          buttonList[j].scale.set(1, 1, 1);
+        }
       }
+    }
+  } else {
+    for (var i = 0; i < buttonList.length; i++) {
+      buttonList[i].scale.set(1, 1, 1);
+      getIndex = -1;
     }
   }
 }
 
 function ClickButton(event) {
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(pointer, camera);
-  raycaster.layers.set(1);
-
-  const intersects = raycaster.intersectObjects(buttonList);
-  for (var i = 0; i < intersects.length; i++) {
-    for (var j = 0; j < buttonList.length; j++) {
-      if (intersects[i].object.name === buttonList[j].name) {
-        // do
-        break;
-      }
-    }
+  if (getIndex != -1) {
+    step = buttonData[getIndex].ToGo;
+    ChangeMaterial(step);
+    ChangeButton(step);
   }
+  // buttonList[getIndex].scale.set(1.5, 1.5, 1.5);
+  // pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  // pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  // raycaster.setFromCamera(pointer, camera);
+  // raycaster.layers.set(1);
+
+  // const intersects = raycaster.intersectObjects(buttonList);
+  // for (var i = 0; i < intersects.length; i++) {
+  //   for (var j = 0; j < buttonList.length; j++) {
+  //     if (intersects[i].object.name === buttonList[j].name) {
+  //       // do
+  //       break;
+  //     }
+  //   }
+  // }
 }
 
 function helper() {

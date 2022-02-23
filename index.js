@@ -1,9 +1,10 @@
 let camera, scene, renderer;
+let mesh;
+let materials = new Array();
 let controls;
 let step;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-let meshs = new Array();
 var buttonPlaneList = new Array();
 var buttonList = new Array();
 
@@ -32,11 +33,13 @@ function init() {
       map: texture,
       side: THREE.BackSide,
     });
-    let geometry = new THREE.SphereGeometry(500, 64, 64);
-    let mesh = new THREE.Mesh(geometry, material);
 
-    meshs.push(mesh);
+    materials.push(material);
   }
+
+  let geometry = new THREE.SphereGeometry(500, 64, 64);
+  mesh = new THREE.Mesh(geometry, materials[0]);
+  scene.add(mesh);
 
   camera = new THREE.PerspectiveCamera(
     65,
@@ -53,15 +56,12 @@ function init() {
   controls.enablePan = false;
 
   step = 0;
-  CreateViewBall(step);
+  ChangeMaterial(step);
   CreateButton(step);
 }
 
-function CreateViewBall(step) {
-  for (var i = 0; i < meshs.length; i++) {
-    scene.remove(meshs[i]);
-  }
-  scene.add(meshs[step]);
+function ChangeMaterial(step) {
+  mesh.material = materials[step];
 }
 
 function CreateButton(step) {
@@ -125,20 +125,6 @@ function ClickButton(event) {
     }
   }
 }
-//#region NOT USE
-function ForwardsMove(directionObject) {
-  const direction = new THREE.Vector3(
-    directionObject.position.x,
-    0,
-    directionObject.position.z
-  );
-  let speed = -0.1;
-
-  var targetPos = mesh.position + direction * speed;
-  // mesh.position.lerp(targetPos, 1);
-  // requestAnimationFrame(ForwardsMove);
-}
-//#endregion
 
 function helper() {
   var grid = new THREE.GridHelper(1000, 10, 0xff0000, 0x000000);

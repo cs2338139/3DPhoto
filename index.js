@@ -158,7 +158,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   for (var i = 0; i <= 5; i++) {
-    const addressTemp = "img/0n.jpg";
+    const addressTemp = "img/0n.JPG";
     const address = addressTemp.replace("n", i);
     const texture = new THREE.TextureLoader().load(address);
     texture.wrapS = THREE.RepeatWrapping;

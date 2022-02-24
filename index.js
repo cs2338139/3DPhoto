@@ -238,7 +238,7 @@ function ChangeButton(step) {
     }
   }
 
-  console.log(buttonList);
+  // console.log(buttonList);
 }
 
 function OverButton(event) {

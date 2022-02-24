@@ -10,8 +10,8 @@ const pointer = new THREE.Vector2();
 var buttonData = [
   {
     Name: "Button_0",
-    PosX: 200,
-    PosY: -350,
+    PosX: 300,
+    PosY: -250,
     PosZ: 50,
     RoationX: 90,
     RoationY: 0,
@@ -21,32 +21,32 @@ var buttonData = [
   },
   {
     Name: "Button_1",
-    PosX: 0,
-    PosY: -400,
+    PosX: -300,
+    PosY: -250,
     PosZ: 0,
-    RoationX: 0,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 90,
     Step: 1,
     ToGo: 0,
   },
   {
     Name: "Button_2",
-    PosX: 0,
-    PosY: -400,
+    PosX: 300,
+    PosY: -250,
     PosZ: 0,
-    RoationX: 0,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: -90,
     Step: 1,
     ToGo: 2,
   },
   {
     Name: "Button_3",
     PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosY: -250,
+    PosZ: 300,
+    RoationX: 90,
     RoationY: 0,
     RoationZ: 0,
     Step: 1,
@@ -55,100 +55,101 @@ var buttonData = [
   {
     Name: "Button_4",
     PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosY: -250,
+    PosZ: -300,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 180,
     Step: 2,
     ToGo: 1,
   },
   {
     Name: "Button_5",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: -300,
+    PosY: -250,
+    PosZ: 0,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 90,
     Step: 2,
     ToGo: 4,
   },
   {
     Name: "Button_6",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: -270,
+    PosY: -250,
+    PosZ: -200,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 145,
     Step: 3,
     ToGo: 1,
   },
   {
     Name: "Button_7",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: 300,
+    PosY: -250,
+    PosZ: -100,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: -130,
     Step: 3,
     ToGo: 4,
   },
   {
     Name: "Button_8",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: -300,
+    PosY: -250,
+    PosZ: 0,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 90,
     Step: 4,
     ToGo: 3,
   },
   {
     Name: "Button_9",
     PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosY: -250,
+    PosZ: -300,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 180,
     Step: 4,
     ToGo: 2,
   },
   {
     Name: "Button_10",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: 300,
+    PosY: -250,
+    PosZ: 0,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: -90,
     Step: 4,
     ToGo: 5,
   },
   {
     Name: "Button_11",
-    PosX: 0,
-    PosY: -400,
-    PosZ: 00,
-    RoationX: 0,
+    PosX: -300,
+    PosY: -250,
+    PosZ: 50,
+    RoationX: 90,
     RoationY: 0,
-    RoationZ: 0,
+    RoationZ: 90,
     Step: 5,
     ToGo: 4,
   },
 ];
 
 init();
-helper();
+// helper();
 render();
-window.addEventListener("pointermove", OverButton);
-window.addEventListener("pointerdown", ClickButton);
 
 function init() {
+  window.addEventListener("pointermove", OverButton);
+  window.addEventListener("pointerdown", ClickButton);
+  window.addEventListener("resize", resize, false);
   scene = new THREE.Scene();
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -191,7 +192,7 @@ function init() {
 
   CreateButton();
 
-  step = 0;
+  step = 5;
   ChangeMaterial(step);
   ChangeButton(step);
 }
@@ -233,9 +234,11 @@ function ChangeButton(step) {
       buttonList[i].layers.enable(1);
     } else {
       buttonList[i].visible = false;
-      buttonList[i].layers.enable(2);
+      buttonList[i].layers.disable(1);
     }
   }
+
+  console.log(buttonList);
 }
 
 function OverButton(event) {
@@ -251,8 +254,8 @@ function OverButton(event) {
     for (var i = 0; i < intersects.length; i++) {
       for (var j = 0; j < buttonList.length; j++) {
         if (intersects[i].object.name === buttonList[j].name) {
-          console.log(buttonList[j].name);
-          buttonList[j].scale.set(1.2, 1.2, 1.2);
+          // console.log(buttonList[j]);
+          buttonList[j].scale.set(1.05, 1.05, 1.05);
           getIndex = j;
         } else {
           buttonList[j].scale.set(1, 1, 1);
@@ -290,6 +293,12 @@ function ClickButton(event) {
   //   }
   // }
 }
+
+function resize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
 
 function helper() {
   var grid = new THREE.GridHelper(1000, 10, 0xff0000, 0x000000);

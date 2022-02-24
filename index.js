@@ -192,7 +192,7 @@ function init() {
 
   CreateButton();
 
-  step = 5;
+  step = 0;
   ChangeMaterial(step);
   ChangeButton(step);
 }
